@@ -6,6 +6,7 @@ import { widthPercentageToDP as wp,
     heightPercentageToDP as hp
  } from 'react-native-responsive-screen';
  import { ThemeContext } from '../ThemeProvider';
+ import Icon from './Icon'
 import Animated, { withSequence, withRepeat,runOnUI, useSharedValue, withSpring, useAnimatedStyle} from 'react-native-reanimated';
  
 const ProjectCard = ({title, description, tools, uri}) => {
@@ -39,7 +40,7 @@ const ProjectCard = ({title, description, tools, uri}) => {
                                                           start={{x:0, y:0}}
                                                           end={{x:1, y:1}}>
                                                             <Image source={uri} style={styles.image} 
-                                                            
+                                                            //resizeMode='stretch'
                                                             />
                                                               <View style={styles.new}/>
                 
@@ -52,7 +53,9 @@ const ProjectCard = ({title, description, tools, uri}) => {
              <Text style={styles.description}>
                 {description}
             </Text>
+            <Icon name='tools' type='Entypo' color='black' size={wp(7)}/>
             <View style={styles.toolsContainer}>
+                
             {
                 tools.map((item, index)=>{
                     return(
@@ -91,7 +94,7 @@ const createStyles=(theme)=> StyleSheet.create({
         padding: wp(3),
         //overflow: 'hidden',
         borderRadius: wp(2),
-         alignItems: 'center',
+        alignItems: 'center',
         
         
     },
@@ -111,12 +114,13 @@ const createStyles=(theme)=> StyleSheet.create({
     title: {
         color: theme.text,
         fontSize: wp(6),
-        fontFamily: 'Sansation-Bold'
+        fontFamily: 'Sansation-Bold',
     },
     description:{
         color: theme.subText,
         fontSize: wp(4),
-        fontFamily: 'Sansation-Regular'
+        fontFamily: 'Sansation-Regular',
+        marginBottom: hp(2)
     },
     toolTextView:{
         //borderWidth: 1,
@@ -141,11 +145,11 @@ const createStyles=(theme)=> StyleSheet.create({
         //justifyContent: 'space-between'
     },
     image: {
-        width: wp(60),
-        height: wp(60),
-        borderRadius: wp(30),
+        width: wp(40),
+        height: wp(40),
+        borderRadius: wp(20),
         //alignSelf: 'center',
-        marginBottom: hp(3)
+        marginBottom: hp(1)
     }
 });
 
