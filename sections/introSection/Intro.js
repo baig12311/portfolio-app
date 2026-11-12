@@ -6,28 +6,35 @@ import Animated, {FadeIn, FadeInLeft} from 'react-native-reanimated';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import createStyles from './IntroStyle';
 import Icon from '../../components/Icon';
-const Intro = () => {
+import useScrollFadeIn from '../../hooks/useScrollFadeIn'
+import useScrollStaggeredItems from '../../hooks/useScrollStaggeredItems'
+const Intro = ({scrollY}) => {
     const theme=useContext(ThemeContext);
     const styles=createStyles(theme)
+    const{animatedStyle, onLayout, layoutY}=useScrollFadeIn(scrollY);
+    const introStyle=useScrollStaggeredItems(scrollY, layoutY, 0)
+     const imageStyle=useScrollStaggeredItems(scrollY, layoutY, 1)
+      const nameStyle=useScrollStaggeredItems(scrollY, layoutY, 2)
+       const titleStyle=useScrollStaggeredItems(scrollY, layoutY, 3)
     return (
-        <View style={styles.container}>
+        <Animated.View style={[styles.container, animatedStyle]} onLayout={onLayout}>
 
-             <Animated.Text entering={FadeInLeft.duration(600)} style={styles.name}>
+             <Animated.Text style={[styles.name, introStyle]}>
                 MySelf
             </Animated.Text>
-            <Animated.Image entering={FadeIn.delay(400)}
+            <Animated.Image
             source={require('../../assets/dp.png')} 
-            style={styles.profilePic}
+            style={[styles.profilePic, imageStyle]}
             resizeMode='contain'
             />
-            <Animated.Text entering={FadeInLeft.duration(600)} style={styles.name}>
+            <Animated.Text style={[styles.name, nameStyle]}>
                 Shaheer Baig
             </Animated.Text>
-             <Animated.Text entering={FadeIn.delay(500)} style={styles.title}>
+             <Animated.Text style={[styles.title, titleStyle]}>
                 React Native Developer
             </Animated.Text>
             
-        </View>
+        </Animated.View>
     );
 };
 export default Intro;

@@ -4,23 +4,28 @@ import { View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import { ThemeContext } from '../../ThemeProvider';
 import Animated, {FadeInUp} from 'react-native-reanimated';
 import createStyles from './AboutStyle';
-const About = () => {
+import useScrollFadeIn from '../../hooks/useScrollFadeIn'
+import useScrollStaggeredItems from '../../hooks/useScrollStaggeredItems'
+const About = ({scrollY}) => {
     const theme=useContext(ThemeContext);
     const styles=createStyles(theme)
+    const{animatedStyle, onLayout, layoutY}=useScrollFadeIn(scrollY);
+    const titleStyle=useScrollStaggeredItems(scrollY, layoutY, 0)
+    const descriptionStyle=useScrollStaggeredItems(scrollY, layoutY, 1)
     return (
-        <View style={styles.container}>
+        <Animated.View style={[styles.container, animatedStyle]} onLayout={onLayout}>
             <Image source={require('../../assets/aboutcartoon.png')} 
             style={styles.image}
             resizeMode='cover'
             />
-           <Animated.Text entering={FadeInUp.duration(600)} style={styles.heading}>
+           <Animated.Text style={[styles.heading, titleStyle]}>
         About Me
       </Animated.Text>
-      <Animated.Text entering={FadeInUp.delay(600)} style={styles.bio}>
+      <Animated.Text style={[styles.bio, descriptionStyle]}>
         I'm a React Native developer with a passion for building beautiful and fast apps.
       </Animated.Text>
             
-        </View>
+        </Animated.View>
     );
 };
 export default About;

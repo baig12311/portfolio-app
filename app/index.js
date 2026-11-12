@@ -7,6 +7,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import Animated, {useAnimatedScrollHandler, useSharedValue} from 'react-native-reanimated';
 import createStyles from './NewStyle';
 import Icon from '../components/Icon';
 import Intro from '../sections/introSection/Intro';
@@ -18,10 +19,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ToggleSwitch from '../components/ToggleSwitch';
 import Projects from '../sections/projectSection/Projects';
 const Index = () => {
+    const scrollY=useSharedValue(0);
     const theme = useContext(ThemeContext);
     const styles = createStyles(theme);
     const[fontsLoaded, setFontsLoaded]=useState(false);
-
+    const scrollHandler=useAnimatedScrollHandler({
+        onScroll:(event)=>{
+            scrollY.value=event.contentOffset.y
+        }
+    })
     useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
@@ -63,16 +69,18 @@ const Index = () => {
             </View>
            
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+            <Animated.ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}
+            onScroll={scrollHandler}
+            scrollEventThrottle={16}>
               
-                     <Intro />
+                     <Intro scrollY={scrollY}/>
               
                  
-                     <About />
+                     <About scrollY={scrollY}/>
                 
                  
-                     <Skills />
-                     <Projects/>
+                     <Skills scrollY={scrollY}/>
+                     <Projects scrollY={scrollY}/>
                 
 
                
@@ -80,7 +88,7 @@ const Index = () => {
                 
                
 
-            </ScrollView>
+            </Animated.ScrollView>
         </SafeAreaView>
 
     );
